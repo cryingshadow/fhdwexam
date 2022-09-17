@@ -1,0 +1,339 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{fhdwexam}[2022/06/08 Exam Package for FHDW]
+
+\RequirePackage{ifthen}
+
+\newboolean{exam@progra}
+\setboolean{exam@progra}{false}
+
+\newboolean{exam@retake}
+\setboolean{exam@retake}{false}
+
+\newboolean{exam@calculator}
+\setboolean{exam@calculator}{false}
+
+\newboolean{exam@othertools}
+\setboolean{exam@othertools}{false}
+
+
+%% Article options
+%\DeclareOption{10pt}{
+%  \PassOptionsToClass{\CurrentOption}{article}
+%}
+
+% Custom package options
+\DeclareOption{progra}{
+ \setboolean{exam@progra}{true}
+}
+\DeclareOption{retake}{
+ \setboolean{exam@retake}{true}
+}
+\DeclareOption{calculator}{
+ \setboolean{exam@calculator}{true}
+}
+
+% Fallback
+\DeclareOption*{
+ \PackageWarning{tosexam}{Unknown option '\CurrentOption'}
+}
+
+%% Execute default options
+%\ExecuteOptions{10pt}
+
+% Process given options
+\ProcessOptions\relax
+
+%% Load base
+%\LoadClass[a4paper]{article}
+
+%% Load additional packages and commands.
+\RequirePackage[ngerman]{babel}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[a4paper,left=2cm,top=1.5cm,bottom=2cm,right=1.4cm]{geometry}
+\RequirePackage{datetime2}
+\RequirePackage{graphicx}
+\RequirePackage{uarial}
+\RequirePackage{hyperref}
+\RequirePackage{mdframed}
+\RequirePackage{amssymb}
+\RequirePackage{listings}
+\RequirePackage{verbatim}
+\RequirePackage{calc}
+\RequirePackage{enumitem}
+\RequirePackage{tikz-qtree}
+\RequirePackage{array}
+\RequirePackage{amsmath}
+\RequirePackage{microtype}
+\RequirePackage{multicol}
+\RequirePackage{pifont}
+\RequirePackage{tikz}
+\usetikzlibrary{arrows,shapes.misc,shapes.arrows,shapes.multipart,shapes.geometric,chains,matrix,positioning,scopes,decorations.pathmorphing,decorations.pathreplacing,shadows,calc,trees}
+
+%% Additional TeX/LaTeX code...
+
+\renewcommand{\familydefault}{\sfdefault}
+
+%\newcounter{exam@numofexercise}
+%\newcounter{exam@numofsubexercise}
+%\newcounter{exam@sumofsubexercise}
+
+\newcommand{\exam@module}{Modul}
+\newcommand{\exam@name}{Klausur \exam@module}
+\newcommand{\exam@shortname}{\exam@name}
+\newcommand{\exam@date}{\today}
+\newcommand{\exam@author}{Dr.\ Thomas Ströder}
+\newcommand{\exam@duration}{90}
+\newcommand{\exam@semester}{1}
+\newcommand{\exam@groups}{keine}
+\newcommand{\exam@first}{\ifthenelse{\boolean{exam@retake}}{N}{E}}
+\newcommand{\exam@notoolscheck}{\ifthenelse{\boolean{exam@calculator}}{\comark}{\ifthenelse{\boolean{exam@othertools}}{\comark}{\cxmark}}}
+\newcommand{\exam@calculatorcheck}{\ifthenelse{\boolean{exam@calculator}}{\cxmark}{\comark}}
+\newcommand{\exam@othertoolscheck}{\ifthenelse{\boolean{exam@othertools}}{\cxmark}{\comark}}
+\newcommand{\exam@othertoolstext}{}
+\newcommand{\exam@personalhints}{}
+
+\newcommand{\ExamModule}[1]{\renewcommand{\exam@module}{#1}}
+\newcommand{\ExamName}[2][]{\renewcommand{\exam@name}{#2}\ifthenelse{\equal{#1}{}}{}{\renewcommand{\exam@shortname}{#1}}}
+\newcommand{\ExamDate}[1]{\renewcommand{\exam@date}{#1}}
+\newcommand{\ExamAuthor}[1]{\renewcommand{\exam@author}{#1}}
+\newcommand{\ExamDuration}[1]{\renewcommand{\exam@duration}{#1}}
+\newcommand{\ExamSemester}[1]{\renewcommand{\exam@semester}{#1}}
+\newcommand{\ExamGroups}[1]{\renewcommand{\exam@groups}{#1}}
+\newcommand{\ExamTools}[1]{\renewcommand{\exam@othertoolstext}{: #1}\setboolean{exam@othertools}{true}}
+\newcommand{\ExamHints}[1]{\renewcommand{\exam@personalhints}{#1}}
+
+%\newcommand{\exam@exercises}{}
+%\newcommand{\exam@exercise}[1]{%
+%  \ifdefempty{\exam@exercises}
+%    {\appto\exam@exercises{#1 & }}
+%    {\appto\exam@exercises{\arabic{exam@sumofsubexercise}\\\hline\setcounter{exam@sumofsubexercise}{0}#1 & }}%
+%}
+
+%\newcommand{\exam@subexercisepoints}{}
+%\newcommand{\exam@subexercisepoint}[1]{%
+  %\ifdefempty{\exam@subexercisepoints}
+    %{\appto\exam@subexercisepoints{#1}}
+    %{\appto\exam@subexercisepoints{ + #1}}%
+%}
+
+%\newenvironment{ExamExercise}[1]{%
+  %\stepcounter{exam@numofexercise}
+  %\exam@exercise{\exam@exercisename \arabic{exam@numofexercise}: #1}
+  %\newpage
+  %\section*{\exam@exercisename \arabic{exam@numofexercise}: #1 (\csname exam@points\theexam@numofexercise\endcsname{}\csname exam@total\theexam@numofexercise\endcsname{})}
+%}
+
+%\newenvironment{subexercise}[1]{%
+  %\stepcounter{exam@numofsubexercise}
+  %\textbf{\alph{exam@numofsubexercise})}
+  %\begin{adjustwidth}{3em}{0em}
+%}{\end{adjustwidth}}
+
+%\newenvironment{solution}{%
+  %\textbf{Lösung:}\\[2ex]
+%}{}
+
+\newenvironment{hints}{%
+    \begin{mdframed}
+        \begin{minipage}{\textwidth}
+            \textbf{Hinweise:}
+            \begin{itemize}
+}{%
+            \end{itemize}
+        \end{minipage}
+    \end{mdframed}
+}
+
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+
+%\AtEndDocument{\appto\exam@exercises{\arabic{exam@sumofsubexercise}}
+
+\pagestyle{headandfoot}
+
+\header{\exam@name, \exam@author}
+       {}
+       {\exam@date}
+\footer{}
+       {\thepage}
+       {}
+
+\headrule
+
+\vqword{\textbf{Aufgabe}}
+\vpword{\textbf{Punkte}}
+\vsword{\textbf{Erreicht}}
+\vtword{\textbf{Gesamt:}}
+
+\qformat{\textbf{Aufgabe~\thequestion{} (\thequestiontitle):~\hfill (\totalpoints{} Punkte)}}
+
+% \extraheadheight[-1cm]{0cm}
+% \extrafootheight[-1cm]{0cm}
+\coverextraheadheight{-5mm}
+% \coverextrafootheight{-1cm}
+
+\patchcmd{\questions}
+  {\def\@currentlabel{\thequestiontitle}}
+  {\def\@currentlabel{\thequestion}}
+  {}
+  {}
+
+% \pointsinrightmargin
+\pointpoints{Punkt}{Punkte}
+% \marginpointname{ \points}
+% \pointformat{\themarginpoints}
+
+% \setlength{\rightpointsmargin}{2.55cm}
+
+%\ifthenelse{\boolean{exam@solution}}{}{\excludecomment{solution}}
+
+\renewcommand{\solutiontitle}{\noindent\textbf{Lösung:}\\[1.5ex]}
+
+
+\lstset{%
+basicstyle=\ttfamily,
+numbers=left,
+xleftmargin=2em
+}
+
+
+\newcommand{\solutiononly}[1]{\ifprintanswers#1\else\fi}
+\newcommand{\exercise}[1]{\titledquestion{#1}\phantom{0}\\[-3ex]}
+\newcommand{\code}[1]{\textnormal{\texttt{#1}}}
+\newcommand{\var}[1]{\textit{#1}}
+\newcommand{\tobinary}[1]{(#1)_{\textit{bin}}}
+\newcommand{\emphasize}[1]{\emph{#1}}
+\renewcommand{\emph}[1]{\textbf{#1}}
+\newcommand{\comark}{$\circ$}
+\newcommand{\cxmark}{$\circ$\hspace*{-2.3mm}\ding{56}\hspace*{-0.5mm}}
+
+\newcommand{\java}{\textsf{Java}}
+\newcommand{\csharp}{\textsf{C\#}}
+\newcommand{\OOn}{$\mathcal{O}$-Notation}
+\newcommand{\OO}[1]{\mathcal{O}(#1)}
+
+
+\def\verbatim@startline{\verbatim@line{\leavevmode\kern20pt\relax}}
+
+%Hoare assertions:
+\newcommand{\dummySizeSmall}[0]{15pt}
+\newcommand{\dummySizeBig}[0]{30pt}
+\newlength{\arglength}
+\newlength{\hoareindent}
+\setlength{\hoareindent}{2cm}
+\newcounter{hoareAssertionNo}
+\newcommand{\newhoareproof}[0]{\setcounter{hoareAssertionNo}{0}}
+\newcommand{\hoareAssertionBig}[1]{\hoareAssertion{\rule{0pt}{\dummySizeSmall}#1}}
+\newcommand{\hoareAssertion}[1]{\hspace*{\hoareindent}\ensuremath{\langle #1 \rangle}\\}
+\newcommand{\hoareCode}[1]{\hspace*{-1cm}\lstinline|#1|\\}
+\newcommand{\hoareSolution}[1]{\ifprintanswers\phantom{0}\\[-1ex]\hspace*{\hoareindent}\ensuremath{\langle #1 \rangle}\\[2ex]\else\hoareEmpty\fi}
+% \newcommand{\hoareSolutionAssertion}[1]{\hspace*{\hoareindent}\ensuremath{\langle #1 \rangle}\\}
+% \newcommand{\hoareSolutionAssertionWithNo}[1]{\hspace*{\hoareindent}\refstepcounter{hoareAssertionNo}\ensuremath{\arabic{hoareAssertionNo}: \langle #1 \rangle}\\}
+\newcommand{\hoareSolutionCode}[1]{\ifprintanswers\else\hspace*{-1cm}\fi\lstinline|#1|\\}
+\newcommand{\hoareEmpty}{\hspace*{\hoareindent}\ensuremath{\langle\vphantom{\rule{0pt}{\dummySizeBig}} \underline{\hspace*{115mm}} \rangle\\}}
+\newcommand{\hoareEmptyMark}[1]{\settowidth{\arglength}{#1}\addtolength{\arglength}{-\hoareindent}\hspace*{-1\arglength}#1\ensuremath{\langle\vphantom{\rule{0pt}{40pt}} \underline{\hspace*{115mm}}\rangle\\}}
+
+
+\newcommand{\prograhint}{\ifthenelse{\boolean{exam@progra}}{Für Programmieraufgaben dürfen Sie sowohl \java- als auch \csharp-Syntax verwenden.}{}}
+
+
+\AtBeginDocument{%
+    \begin{coverpages}
+        \begin{flushright}
+            \includegraphics[height=2.12cm]{fhdwlogo.png}
+        \end{flushright}
+		
+		\vspace*{-7ex}
+        \begin{center}
+		    {\Large \textbf{Klausurdeckblatt}}
+        \end{center}
+		
+		\noindent
+		\textbf{\underline{Vom Prüfer auszufüllen:}}\\[-2ex]
+		\begin{multicols}{2}
+		\noindent
+        Modul: \exam@module\\[1.5ex]
+        Datum der Klausur: \exam@date\\[1.5ex]
+        Dauer der Klausur: \exam@duration{} Minuten\\[1.5ex]
+        Erstklausur (E) bzw. Nachklausur (N): \exam@first\\
+        
+		\columnbreak
+
+        \noindent
+        Prüfer: \exam@author\\[1.5ex]
+        Hochschulsemester: \exam@semester\\[1.5ex]
+        Studiengruppe/n: \exam@groups\\[1.5ex]
+		Anzahl der Blätter (inkl. Deckblatt): \totalnumpages\\
+		\end{multicols}
+		
+		\vspace*{-4ex}
+		
+        \begin{flushright}
+        Zugelassene Hilfsmittel:
+		\begin{minipage}[t]{0.7\textwidth}
+            \begin{itemize}[noitemsep]
+			\item[\exam@notoolscheck] Keine Hilfsmittel
+            \item[\exam@calculatorcheck] FHDW-Taschenrechner
+            \item[\exam@othertoolscheck] andere Hilfsmittel\exam@othertoolstext
+			\end{itemize}
+        \end{minipage}
+        \end{flushright}
+
+        \vspace*{1ex}
+
+		\noindent
+		\textbf{\underline{Vom Studenten auszufüllen:}}\\[3ex]
+        Name, Vorname: \hspace*{5mm} \hrulefill\\[3ex]
+        Matrikelnummer: \hspace*{5mm} \hrulefill\\[4ex]
+		{\large \underline{Wichtige Hinweise für die Prüfung:}}
+		{\small \setlength{\leftmargini}{1.5em} \SetTracking{encoding=*}{-50}\lsstyle
+		\begin{enumerate}[itemsep=0.1pt]
+        \item Sie sind verpflichtet, zu Beginn der Klausur zu überprüfen, ob genauso viele Blätter in Ihrer Klausur vorhanden sind, wie sie auf dem Deckblatt angegeben sind. 
+		      Abweichungen sind von Ihnen sofort der Aufsichtsperson zu melden. Reklamationen nach Beginn der Bearbeitungszeit werden nicht anerkannt und gehen zu Ihren Lasten.
+        \item Die Klausur muss geheftet bleiben. Eine Lösung der Heftung während der Klausur ist nur mit Genehmigung der Aufsichtsperson zulässig; in jedem Fall muss die Klausur geheftet abgegeben werden.
+        \item \textbf{Bleistift und Stifte mit roter Farbe dürfen nicht benutzt werden.}
+        \item Die Verwendung weiteren Papiers neben den Klausurblättern ist ausschließlich nach Genehmigung und Abzeichnung entsprechender Zusatzblätter durch eine Aufsichtsperson möglich. 
+		      Zusatzblätter müssen das Signum der Aufsichtsperson, das Datum und den Namen des Studenten / der Studentin tragen. Im Bedarfsfall benutzen Sie bitte zuerst die Rückseiten der 
+			  Klausurblätter als Papierreserve. \textbf{Alle} Zusatzblätter müssen abgegeben werden, \textbf{auch die leeren und die nur für Nebenrechnungen benötigten}.
+
+              Sie sind dafür verantwortlich, dass alle Klausurblätter \textbf{vollständig} bei der Aufsichtsperson abgegeben werden.
+        \item Die Aufsichten (auch anwesende Klausursteller) dürfen keinerlei Hinweise geben. Bei Unklarheiten geben Sie Ihre Interpretation der Aufgabenstellung als Kommentar zu Ihrer Lösung an.
+        \item Halten Sie bitte Ihren Studentenausweis (mit Lichtbild) oder ihren Personalausweis und die Immatrikulationsbescheinigung für Kontrollzwecke bereit.
+        \item Kommunikationsfähige Medien (wie z.\,B.\ Handy und Smartwatch) dürfen zur Klausur nicht mitgebracht werden. Deren Verfügbarkeit während der Klausur wird als Betrugsversuch gewertet.
+        \item Ein Verlassen des Raumes ist nur möglich, wenn die Klausur bei der Aufsichtsperson hinterlegt wird.
+        \item Der \textbf{Täuschungsversuch in einer Wiederholungsprüfung} führt zur \textbf{Zwangsexmatrikulation}.
+		\end{enumerate}
+        }
+		
+		\noindent
+		\hrulefill
+		
+		\vspace*{1ex}
+		
+		\noindent
+		\textbf{\underline{Vom Prüfer auszufüllen:}}\\[5ex]
+		Note: \rule[-1pt]{2cm}{0.5pt}\hspace*{4cm}\rule[-1pt]{7cm}{0.5pt}
+		
+		\vspace*{-0.5ex}
+		\hspace*{8.5cm}{\small Unterschrift Prüfer}
+		
+		\pagebreak
+		
+        \begin{center}
+            {\Huge \textbf{\exam@name}\\[1ex]}
+            {\Large \exam@date\\}
+            {\Large Dozent: \exam@author\\}
+          
+            \vspace*{5ex}
+                    
+            \gradetable
+                
+            \vspace*{5ex}
+                    
+			\begin{hints}
+			\exam@personalhints
+			\item Ich wünsche Ihnen viel Erfolg!
+			\end{hints}
+        \end{center}
+    \end{coverpages}
+}
