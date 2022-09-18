@@ -3,50 +3,35 @@
 
 \RequirePackage{ifthen}
 
-\newboolean{exam@progra}
-\setboolean{exam@progra}{false}
+\newboolean{fhdwexam@progra}
+\setboolean{fhdwexam@progra}{false}
+\newboolean{fhdwexam@retake}
+\setboolean{fhdwexam@retake}{false}
+\newboolean{fhdwexam@calculator}
+\setboolean{fhdwexam@calculator}{false}
+\newboolean{fhdwexam@othertools}
+\setboolean{fhdwexam@othertools}{false}
+\newboolean{fhdwexam@cover}
+\setboolean{fhdwexam@cover}{true}
 
-\newboolean{exam@retake}
-\setboolean{exam@retake}{false}
-
-\newboolean{exam@calculator}
-\setboolean{exam@calculator}{false}
-
-\newboolean{exam@othertools}
-\setboolean{exam@othertools}{false}
-
-
-%% Article options
-%\DeclareOption{10pt}{
-%  \PassOptionsToClass{\CurrentOption}{article}
-%}
-
-% Custom package options
 \DeclareOption{progra}{
- \setboolean{exam@progra}{true}
+ \setboolean{fhdwexam@progra}{true}
 }
 \DeclareOption{retake}{
- \setboolean{exam@retake}{true}
+ \setboolean{fhdwexam@retake}{true}
 }
 \DeclareOption{calculator}{
- \setboolean{exam@calculator}{true}
+ \setboolean{fhdwexam@calculator}{true}
 }
-
-% Fallback
+\DeclareOption{nocover}{
+ \setboolean{fhdwexam@cover}{false}
+}
 \DeclareOption*{
  \PackageWarning{tosexam}{Unknown option '\CurrentOption'}
 }
 
-%% Execute default options
-%\ExecuteOptions{10pt}
-
-% Process given options
 \ProcessOptions\relax
 
-%% Load base
-%\LoadClass[a4paper]{article}
-
-%% Load additional packages and commands.
 \RequirePackage[ngerman]{babel}
 \RequirePackage[T1]{fontenc}
 \RequirePackage[a4paper,left=2cm,top=1.5cm,bottom=2cm,right=1.4cm]{geometry}
@@ -69,69 +54,32 @@
 \RequirePackage{tikz}
 \usetikzlibrary{arrows,shapes.misc,shapes.arrows,shapes.multipart,shapes.geometric,chains,matrix,positioning,scopes,decorations.pathmorphing,decorations.pathreplacing,shadows,calc,trees}
 
-%% Additional TeX/LaTeX code...
-
 \renewcommand{\familydefault}{\sfdefault}
 
-%\newcounter{exam@numofexercise}
-%\newcounter{exam@numofsubexercise}
-%\newcounter{exam@sumofsubexercise}
+\newcommand{\fhdwexam@module}{Modul}
+\newcommand{\fhdwexam@name}{Klausur \fhdwexam@module}
+\newcommand{\fhdwexam@shortname}{\fhdwexam@name}
+\newcommand{\fhdwexam@date}{\today}
+\newcommand{\fhdwexam@author}{Dr.\ Thomas Ströder}
+\newcommand{\fhdwexam@duration}{90}
+\newcommand{\fhdwexam@semester}{1}
+\newcommand{\fhdwexam@groups}{keine}
+\newcommand{\fhdwexam@first}{\ifthenelse{\boolean{fhdwexam@retake}}{N}{E}}
+\newcommand{\fhdwexam@notoolscheck}{\ifthenelse{\boolean{fhdwexam@calculator}}{\comark}{\ifthenelse{\boolean{fhdwexam@othertools}}{\comark}{\cxmark}}}
+\newcommand{\fhdwexam@calculatorcheck}{\ifthenelse{\boolean{fhdwexam@calculator}}{\cxmark}{\comark}}
+\newcommand{\fhdwexam@othertoolscheck}{\ifthenelse{\boolean{fhdwexam@othertools}}{\cxmark}{\comark}}
+\newcommand{\fhdwexam@othertoolstext}{}
+\newcommand{\fhdwexam@personalhints}{}
 
-\newcommand{\exam@module}{Modul}
-\newcommand{\exam@name}{Klausur \exam@module}
-\newcommand{\exam@shortname}{\exam@name}
-\newcommand{\exam@date}{\today}
-\newcommand{\exam@author}{Dr.\ Thomas Ströder}
-\newcommand{\exam@duration}{90}
-\newcommand{\exam@semester}{1}
-\newcommand{\exam@groups}{keine}
-\newcommand{\exam@first}{\ifthenelse{\boolean{exam@retake}}{N}{E}}
-\newcommand{\exam@notoolscheck}{\ifthenelse{\boolean{exam@calculator}}{\comark}{\ifthenelse{\boolean{exam@othertools}}{\comark}{\cxmark}}}
-\newcommand{\exam@calculatorcheck}{\ifthenelse{\boolean{exam@calculator}}{\cxmark}{\comark}}
-\newcommand{\exam@othertoolscheck}{\ifthenelse{\boolean{exam@othertools}}{\cxmark}{\comark}}
-\newcommand{\exam@othertoolstext}{}
-\newcommand{\exam@personalhints}{}
-
-\newcommand{\ExamModule}[1]{\renewcommand{\exam@module}{#1}}
-\newcommand{\ExamName}[2][]{\renewcommand{\exam@name}{#2}\ifthenelse{\equal{#1}{}}{}{\renewcommand{\exam@shortname}{#1}}}
-\newcommand{\ExamDate}[1]{\renewcommand{\exam@date}{#1}}
-\newcommand{\ExamAuthor}[1]{\renewcommand{\exam@author}{#1}}
-\newcommand{\ExamDuration}[1]{\renewcommand{\exam@duration}{#1}}
-\newcommand{\ExamSemester}[1]{\renewcommand{\exam@semester}{#1}}
-\newcommand{\ExamGroups}[1]{\renewcommand{\exam@groups}{#1}}
-\newcommand{\ExamTools}[1]{\renewcommand{\exam@othertoolstext}{: #1}\setboolean{exam@othertools}{true}}
-\newcommand{\ExamHints}[1]{\renewcommand{\exam@personalhints}{#1}}
-
-%\newcommand{\exam@exercises}{}
-%\newcommand{\exam@exercise}[1]{%
-%  \ifdefempty{\exam@exercises}
-%    {\appto\exam@exercises{#1 & }}
-%    {\appto\exam@exercises{\arabic{exam@sumofsubexercise}\\\hline\setcounter{exam@sumofsubexercise}{0}#1 & }}%
-%}
-
-%\newcommand{\exam@subexercisepoints}{}
-%\newcommand{\exam@subexercisepoint}[1]{%
-  %\ifdefempty{\exam@subexercisepoints}
-    %{\appto\exam@subexercisepoints{#1}}
-    %{\appto\exam@subexercisepoints{ + #1}}%
-%}
-
-%\newenvironment{ExamExercise}[1]{%
-  %\stepcounter{exam@numofexercise}
-  %\exam@exercise{\exam@exercisename \arabic{exam@numofexercise}: #1}
-  %\newpage
-  %\section*{\exam@exercisename \arabic{exam@numofexercise}: #1 (\csname exam@points\theexam@numofexercise\endcsname{}\csname exam@total\theexam@numofexercise\endcsname{})}
-%}
-
-%\newenvironment{subexercise}[1]{%
-  %\stepcounter{exam@numofsubexercise}
-  %\textbf{\alph{exam@numofsubexercise})}
-  %\begin{adjustwidth}{3em}{0em}
-%}{\end{adjustwidth}}
-
-%\newenvironment{solution}{%
-  %\textbf{Lösung:}\\[2ex]
-%}{}
+\newcommand{\ExamModule}[1]{\renewcommand{\fhdwexam@module}{#1}}
+\newcommand{\ExamName}[2][]{\renewcommand{\fhdwexam@name}{#2}\ifthenelse{\equal{#1}{}}{}{\renewcommand{\fhdwexam@shortname}{#1}}}
+\newcommand{\ExamDate}[1]{\renewcommand{\fhdwexam@date}{#1}}
+\newcommand{\ExamAuthor}[1]{\renewcommand{\fhdwexam@author}{#1}}
+\newcommand{\ExamDuration}[1]{\renewcommand{\fhdwexam@duration}{#1}}
+\newcommand{\ExamSemester}[1]{\renewcommand{\fhdwexam@semester}{#1}}
+\newcommand{\ExamGroups}[1]{\renewcommand{\fhdwexam@groups}{#1}}
+\newcommand{\ExamTools}[1]{\renewcommand{\fhdwexam@othertoolstext}{: #1}\setboolean{fhdwexam@othertools}{true}}
+\newcommand{\ExamHints}[1]{\renewcommand{\fhdwexam@personalhints}{#1}}
 
 \newenvironment{hints}{%
     \begin{mdframed}
@@ -146,14 +94,11 @@
 
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
-
-%\AtEndDocument{\appto\exam@exercises{\arabic{exam@sumofsubexercise}}
-
 \pagestyle{headandfoot}
 
-\header{\exam@name, \exam@author}
+\header{\fhdwexam@name, \fhdwexam@author}
        {}
-       {\exam@date}
+       {\fhdwexam@date}
 \footer{}
        {\thepage}
        {}
@@ -167,10 +112,7 @@
 
 \qformat{\textbf{Aufgabe~\thequestion{} (\thequestiontitle):~\hfill (\totalpoints{} Punkte)}}
 
-% \extraheadheight[-1cm]{0cm}
-% \extrafootheight[-1cm]{0cm}
 \coverextraheadheight{-5mm}
-% \coverextrafootheight{-1cm}
 
 \patchcmd{\questions}
   {\def\@currentlabel{\thequestiontitle}}
@@ -178,24 +120,15 @@
   {}
   {}
 
-% \pointsinrightmargin
 \pointpoints{Punkt}{Punkte}
-% \marginpointname{ \points}
-% \pointformat{\themarginpoints}
-
-% \setlength{\rightpointsmargin}{2.55cm}
-
-%\ifthenelse{\boolean{exam@solution}}{}{\excludecomment{solution}}
 
 \renewcommand{\solutiontitle}{\noindent\textbf{Lösung:}\\[1.5ex]}
-
 
 \lstset{%
 basicstyle=\ttfamily,
 numbers=left,
 xleftmargin=2em
 }
-
 
 \newcommand{\solutiononly}[1]{\ifprintanswers#1\else\fi}
 \newcommand{\exercise}[1]{\titledquestion{#1}\phantom{0}\\[-3ex]}
@@ -227,17 +160,16 @@ xleftmargin=2em
 \newcommand{\hoareAssertion}[1]{\hspace*{\hoareindent}\ensuremath{\langle #1 \rangle}\\}
 \newcommand{\hoareCode}[1]{\hspace*{-1cm}\lstinline|#1|\\}
 \newcommand{\hoareSolution}[1]{\ifprintanswers\phantom{0}\\[-1ex]\hspace*{\hoareindent}\ensuremath{\langle #1 \rangle}\\[2ex]\else\hoareEmpty\fi}
-% \newcommand{\hoareSolutionAssertion}[1]{\hspace*{\hoareindent}\ensuremath{\langle #1 \rangle}\\}
-% \newcommand{\hoareSolutionAssertionWithNo}[1]{\hspace*{\hoareindent}\refstepcounter{hoareAssertionNo}\ensuremath{\arabic{hoareAssertionNo}: \langle #1 \rangle}\\}
 \newcommand{\hoareSolutionCode}[1]{\ifprintanswers\else\hspace*{-1cm}\fi\lstinline|#1|\\}
 \newcommand{\hoareEmpty}{\hspace*{\hoareindent}\ensuremath{\langle\vphantom{\rule{0pt}{\dummySizeBig}} \underline{\hspace*{115mm}} \rangle\\}}
 \newcommand{\hoareEmptyMark}[1]{\settowidth{\arglength}{#1}\addtolength{\arglength}{-\hoareindent}\hspace*{-1\arglength}#1\ensuremath{\langle\vphantom{\rule{0pt}{40pt}} \underline{\hspace*{115mm}}\rangle\\}}
 
 
-\newcommand{\prograhint}{\ifthenelse{\boolean{exam@progra}}{Für Programmieraufgaben dürfen Sie sowohl \java- als auch \csharp-Syntax verwenden.}{}}
+\newcommand{\prograhint}{\ifthenelse{\boolean{fhdwexam@progra}}{Für Programmieraufgaben dürfen Sie sowohl \java- als auch \csharp-Syntax verwenden.}{}}
 
 
 \AtBeginDocument{%
+    \ifthenelse{\boolean{fhdwexam@cover}}{%
     \begin{coverpages}
         \begin{flushright}
             \includegraphics[height=2.12cm]{fhdwlogo.png}
@@ -252,17 +184,17 @@ xleftmargin=2em
 		\textbf{\underline{Vom Prüfer auszufüllen:}}\\[-2ex]
 		\begin{multicols}{2}
 		\noindent
-        Modul: \exam@module\\[1.5ex]
-        Datum der Klausur: \exam@date\\[1.5ex]
-        Dauer der Klausur: \exam@duration{} Minuten\\[1.5ex]
-        Erstklausur (E) bzw. Nachklausur (N): \exam@first\\
+        Modul: \fhdwexam@module\\[1.5ex]
+        Datum der Klausur: \fhdwexam@date\\[1.5ex]
+        Dauer der Klausur: \fhdwexam@duration{} Minuten\\[1.5ex]
+        Erstklausur (E) bzw. Nachklausur (N): \fhdwexam@first\\
         
 		\columnbreak
 
         \noindent
-        Prüfer: \exam@author\\[1.5ex]
-        Hochschulsemester: \exam@semester\\[1.5ex]
-        Studiengruppe/n: \exam@groups\\[1.5ex]
+        Prüfer: \fhdwexam@author\\[1.5ex]
+        Hochschulsemester: \fhdwexam@semester\\[1.5ex]
+        Studiengruppe/n: \fhdwexam@groups\\[1.5ex]
 		Anzahl der Blätter (inkl. Deckblatt): \totalnumpages\\
 		\end{multicols}
 		
@@ -272,9 +204,9 @@ xleftmargin=2em
         Zugelassene Hilfsmittel:
 		\begin{minipage}[t]{0.7\textwidth}
             \begin{itemize}[noitemsep]
-			\item[\exam@notoolscheck] Keine Hilfsmittel
-            \item[\exam@calculatorcheck] FHDW-Taschenrechner
-            \item[\exam@othertoolscheck] andere Hilfsmittel\exam@othertoolstext
+			\item[\fhdwexam@notoolscheck] Keine Hilfsmittel
+            \item[\fhdwexam@calculatorcheck] FHDW-Taschenrechner
+            \item[\fhdwexam@othertoolscheck] andere Hilfsmittel\fhdwexam@othertoolstext
 			\end{itemize}
         \end{minipage}
         \end{flushright}
@@ -320,9 +252,9 @@ xleftmargin=2em
 		\pagebreak
 		
         \begin{center}
-            {\Huge \textbf{\exam@name}\\[1ex]}
-            {\Large \exam@date\\}
-            {\Large Dozent: \exam@author\\}
+            {\Huge \textbf{\fhdwexam@name}\\[1ex]}
+            {\Large \fhdwexam@date\\}
+            {\Large Dozent: \fhdwexam@author\\}
           
             \vspace*{5ex}
                     
@@ -331,9 +263,10 @@ xleftmargin=2em
             \vspace*{5ex}
                     
 			\begin{hints}
-			\exam@personalhints
+			\fhdwexam@personalhints
 			\item Ich wünsche Ihnen viel Erfolg!
 			\end{hints}
         \end{center}
     \end{coverpages}
+    }{}
 }
