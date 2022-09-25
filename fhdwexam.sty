@@ -13,6 +13,8 @@
 \setboolean{fhdwexam@othertools}{false}
 \newboolean{fhdwexam@cover}
 \setboolean{fhdwexam@cover}{true}
+\newboolean{fhdwexam@nopoints}
+\setboolean{fhdwexam@nopoints}{false}
 
 \DeclareOption{progra}{
  \setboolean{fhdwexam@progra}{true}
@@ -26,6 +28,9 @@
 \DeclareOption{nocover}{
  \setboolean{fhdwexam@cover}{false}
 }
+\DeclareOption{nopoints}{
+ \setboolean{fhdwexam@nopoints}{true}
+}
 \DeclareOption*{
  \PackageWarning{tosexam}{Unknown option '\CurrentOption'}
 }
@@ -38,6 +43,7 @@
 \RequirePackage{datetime2}
 \RequirePackage{graphicx}
 \RequirePackage{uarial}
+\RequirePackage{nimbusmono}
 \RequirePackage{hyperref}
 \RequirePackage{mdframed}
 \RequirePackage{amssymb}
@@ -110,7 +116,7 @@
 \vsword{\textbf{Erreicht}}
 \vtword{\textbf{Gesamt:}}
 
-\qformat{\textbf{Aufgabe~\thequestion{} (\thequestiontitle):~\hfill (\totalpoints{} Punkte)}}
+\qformat{\textbf{Aufgabe~\thequestion{} (\thequestiontitle):~\hfill \ifthenelse{\boolean{fhdwexam@nopoints}}{}{(\totalpoints{} Punkte)}}}
 
 \coverextraheadheight{-5mm}
 
@@ -166,6 +172,8 @@ xleftmargin=2em
 
 
 \newcommand{\prograhint}{\ifthenelse{\boolean{fhdwexam@progra}}{Für Programmieraufgaben dürfen Sie sowohl \java- als auch \csharp-Syntax verwenden.}{}}
+
+\ifthenelse{\boolean{fhdwexam@nopoints}}{\nopointsinmargin\pointformat{}}{}
 
 
 \AtBeginDocument{%
