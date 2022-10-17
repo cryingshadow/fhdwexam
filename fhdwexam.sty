@@ -13,6 +13,8 @@
 \setboolean{fhdwexam@othertools}{false}
 \newboolean{fhdwexam@cover}
 \setboolean{fhdwexam@cover}{true}
+\newboolean{fhdwexam@simple}
+\setboolean{fhdwexam@simple}{false}
 \newboolean{fhdwexam@nopoints}
 \setboolean{fhdwexam@nopoints}{false}
 
@@ -28,6 +30,9 @@
 \DeclareOption{nocover}{
  \setboolean{fhdwexam@cover}{false}
 }
+\DeclareOption{simple}{
+ \setboolean{fhdwexam@simple}{true}
+}
 \DeclareOption{nopoints}{
  \setboolean{fhdwexam@nopoints}{true}
 }
@@ -42,6 +47,7 @@
 \RequirePackage[a4paper,left=2cm,top=1.5cm,bottom=2cm,right=1.4cm]{geometry}
 \RequirePackage{datetime2}
 \RequirePackage{graphicx}
+\RequirePackage[table]{xcolor}
 \RequirePackage{uarial}
 \RequirePackage{nimbusmono}
 \RequirePackage{hyperref}
@@ -57,6 +63,7 @@
 \RequirePackage{microtype}
 \RequirePackage{multicol}
 \RequirePackage{pifont}
+\RequirePackage{seqsplit}
 \RequirePackage{tikz}
 \usetikzlibrary{arrows,shapes.misc,shapes.arrows,shapes.multipart,shapes.geometric,chains,matrix,positioning,scopes,decorations.pathmorphing,decorations.pathreplacing,shadows,calc,trees}
 
@@ -139,6 +146,7 @@ xleftmargin=2em
 \newcommand{\solutiononly}[1]{\ifprintanswers#1\else\fi}
 \newcommand{\exercise}[1]{\titledquestion{#1}\phantom{0}\\[-3ex]}
 \newcommand{\code}[1]{\textnormal{\texttt{#1}}}
+\newcommand{\codeseq}[1]{{\ttfamily\seqsplit{#1}}}
 \newcommand{\var}[1]{\textit{#1}}
 \newcommand{\tobinary}[1]{(#1)_{\textit{bin}}}
 \newcommand{\emphasize}[1]{\emph{#1}}
@@ -180,6 +188,7 @@ xleftmargin=2em
 \AtBeginDocument{%
     \ifthenelse{\boolean{fhdwexam@cover}}{%
     \begin{coverpages}
+        \ifthenelse{\boolean{fhdwexam@simple}}{}{
         \begin{flushright}
             \includegraphics[height=2.12cm]{fhdwlogo.png}
         \end{flushright}
@@ -259,7 +268,8 @@ xleftmargin=2em
 		\hspace*{8.5cm}{\small Unterschrift Prüfer}
 		
 		\pagebreak
-		
+		}
+        
         \begin{center}
             {\Huge \textbf{\fhdwexam@name}\\[1ex]}
             {\Large \fhdwexam@date\\}
