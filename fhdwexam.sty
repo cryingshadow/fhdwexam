@@ -154,7 +154,7 @@ xleftmargin=2em
 \renewcommand{\emph}[1]{\textbf{#1}}
 \newcommand{\comark}{$\circ$}
 \newcommand{\cxmark}{$\circ$\hspace*{-2.3mm}\ding{56}\hspace*{-0.5mm}}
-
+\newcommand*{\circled}[1]{\tikz[baseline=(char.base)]{\node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
 \newcommand{\java}{\textsf{Java}}
 \newcommand{\csharp}{\textsf{C\#}}
 \newcommand{\OOn}{$\mathcal{O}$-Notation}
