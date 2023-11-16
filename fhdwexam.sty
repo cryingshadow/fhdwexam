@@ -42,32 +42,16 @@
 
 \ProcessOptions\relax
 
-\RequirePackage[ngerman]{babel}
-\RequirePackage[T1]{fontenc}
+\RequirePackage{fhdwutil}
 \RequirePackage[a4paper,left=2cm,top=1.5cm,bottom=2cm,right=1.4cm]{geometry}
 \RequirePackage{datetime2}
-\RequirePackage{graphicx}
-\RequirePackage[table]{xcolor}
-\RequirePackage{uarial}
-\RequirePackage{nimbusmono}
-\RequirePackage{hyperref}
 \RequirePackage{mdframed}
-\RequirePackage{amssymb}
-\RequirePackage{listings}
-\RequirePackage{verbatim}
-\RequirePackage{calc}
-\RequirePackage{enumitem}
 \RequirePackage{tikz-qtree}
-\RequirePackage{array}
-\RequirePackage{amsmath}
 \RequirePackage{microtype}
-\RequirePackage{multicol}
 \RequirePackage{pifont}
 \RequirePackage{longtable}
 \RequirePackage{seqsplit}
 \RequirePackage[output-decimal-marker={,}]{siunitx}
-\RequirePackage{tikz}
-\usetikzlibrary{arrows,shapes,chains,matrix,positioning,scopes,decorations.pathmorphing,decorations.pathreplacing,shadows,calc,trees}
 
 \renewcommand{\familydefault}{\sfdefault}
 
@@ -148,20 +132,11 @@ xleftmargin=2em
 \newcommand{\solutiononly}[1]{\ifprintanswers#1\else\fi}
 \newcommand{\exercise}[1]{\titledquestion{#1}\phantom{0}\\[-3ex]}
 \newcommand{\singleexercise}[2]{\titledquestion{#1}[#2]\phantom{0}\\[-3ex]}
-\newcommand{\code}[1]{\textnormal{\texttt{#1}}}
 \newcommand{\codeseq}[1]{{\ttfamily\seqsplit{#1}}}
-\newcommand{\var}[1]{\textit{#1}}
 \newcommand{\tobinary}[1]{(#1)_{\textit{bin}}}
-\newcommand{\emphasize}[1]{\emph{#1}}
-\renewcommand{\emph}[1]{\textbf{#1}}
 \newcommand{\comark}{$\circ$}
 \newcommand{\cxmark}{$\circ$\hspace*{-2.3mm}\ding{56}\hspace*{-0.5mm}}
 \newcommand*{\circled}[1]{\tikz[baseline=(char.base)]{\node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
-\newcommand{\java}{\textsf{Java}}
-\newcommand{\csharp}{\textsf{C\#}}
-\newcommand{\OOn}{$\mathcal{O}$-Notation}
-\newcommand{\OO}[1]{\mathcal{O}(#1)}
-\newcommand{\nats}{\mathbb{N}}
 
 
 \def\verbatim@startline{\verbatim@line{\leavevmode\kern20pt\relax}}
