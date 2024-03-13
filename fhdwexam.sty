@@ -161,7 +161,7 @@ xleftmargin=2em
 \newcommand{\hoareEmptyMark}[1]{\settowidth{\arglength}{#1}\addtolength{\arglength}{-\hoareindent}\hspace*{-1\arglength}#1\ensuremath{\langle\vphantom{\rule{0pt}{40pt}} \underline{\hspace*{115mm}}\rangle\\}}
 
 
-\newcommand{\prograhint}{\ifthenelse{\boolean{fhdwexam@progra}}{Für Programmieraufgaben dürfen Sie sowohl \java- als auch \csharp-Syntax verwenden.}{}}
+\newcommand{\prograhint}{\ifthenelse{\boolean{fhdwexam@progra}}{\item Für Programmieraufgaben dürfen Sie sowohl \java- als auch \csharp-Syntax verwenden.}{}}
 
 \ifthenelse{\boolean{fhdwexam@nopoints}}{\nopointsinmargin\pointformat{}}{}
 
@@ -264,6 +264,7 @@ xleftmargin=2em
                     
 			\begin{hints}
 			\fhdwexam@personalhints
+            \prograhint
 			\item Ich wünsche Ihnen viel Erfolg!
 			\end{hints}
         \end{center}
