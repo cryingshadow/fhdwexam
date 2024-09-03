@@ -3,6 +3,8 @@
 
 \RequirePackage{ifthen}
 
+\newboolean{fhdwexam@java}
+\setboolean{fhdwexam@java}{false}
 \newboolean{fhdwexam@progra}
 \setboolean{fhdwexam@progra}{false}
 \newboolean{fhdwexam@retake}
@@ -18,6 +20,9 @@
 \newboolean{fhdwexam@nopoints}
 \setboolean{fhdwexam@nopoints}{false}
 
+\DeclareOption{java}{
+ \setboolean{fhdwexam@java}{true}
+}
 \DeclareOption{progra}{
  \setboolean{fhdwexam@progra}{true}
 }
@@ -161,7 +166,16 @@ xleftmargin=2em
 \newcommand{\hoareEmptyMark}[1]{\settowidth{\arglength}{#1}\addtolength{\arglength}{-\hoareindent}\hspace*{-1\arglength}#1\ensuremath{\langle\vphantom{\rule{0pt}{40pt}} \underline{\hspace*{115mm}}\rangle\\}}
 
 
-\newcommand{\prograhint}{\ifthenelse{\boolean{fhdwexam@progra}}{\item Für Programmieraufgaben dürfen Sie sowohl \java- als auch \csharp-Syntax verwenden.}{}}
+\newcommand{\prograhint}{%
+  \ifthenelse{\boolean{fhdwexam@progra}}{%
+    \item Für Programmieraufgaben dürfen Sie sowohl \java- als auch \csharp-Syntax verwenden.
+  }{%
+    \ifthenelse{\boolean{fhdwexam@java}}{%
+      \item Verwenden Sie für Programmieraufgaben die \java-Syntax.
+    }{%
+    }
+  }
+}
 
 \ifthenelse{\boolean{fhdwexam@nopoints}}{\nopointsinmargin\pointformat{}}{}
 
