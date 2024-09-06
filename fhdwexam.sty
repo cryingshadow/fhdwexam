@@ -157,14 +157,14 @@ xleftmargin=2em
 \setlength{\hoareindent}{2cm}
 \newcounter{hoareAssertionNo}
 \newcommand{\newhoareproof}[0]{\setcounter{hoareAssertionNo}{0}}
+\newcommand{\hoareExpression}[1]{\ensuremath{\langle\; #1 \;\rangle}}
 \newcommand{\hoareAssertionBig}[1]{\hoareAssertion{\rule{0pt}{\dummySizeSmall}#1}}
-\newcommand{\hoareAssertion}[1]{\hspace*{\hoareindent}\ensuremath{\langle #1 \rangle}\\}
+\newcommand{\hoareAssertion}[1]{\hspace*{\hoareindent}\hoareExpression{#1}\\}
 \newcommand{\hoareCode}[1]{\hspace*{-1cm}\lstinline|#1|\\}
-\newcommand{\hoareSolution}[1]{\ifprintanswers\phantom{0}\\[-1ex]\hspace*{\hoareindent}\ensuremath{\langle #1 \rangle}\\[2ex]\else\hoareEmpty\fi}
+\newcommand{\hoareSolution}[1]{\ifprintanswers\phantom{0}\\[-1ex]\hspace*{\hoareindent}\hoareExpression{#1}\\[2ex]\else\hoareEmpty\fi}
 \newcommand{\hoareSolutionCode}[1]{\ifprintanswers\else\hspace*{-1cm}\fi\lstinline|#1|\\}
 \newcommand{\hoareEmpty}{\hspace*{\hoareindent}\ensuremath{\langle\vphantom{\rule{0pt}{\dummySizeBig}} \underline{\hspace*{115mm}} \rangle\\}}
 \newcommand{\hoareEmptyMark}[1]{\settowidth{\arglength}{#1}\addtolength{\arglength}{-\hoareindent}\hspace*{-1\arglength}#1\ensuremath{\langle\vphantom{\rule{0pt}{40pt}} \underline{\hspace*{115mm}}\rangle\\}}
-
 
 \newcommand{\prograhint}{%
   \ifthenelse{\boolean{fhdwexam@progra}}{%
