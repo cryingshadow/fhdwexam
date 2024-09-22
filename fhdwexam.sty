@@ -19,6 +19,8 @@
 \setboolean{fhdwexam@simple}{false}
 \newboolean{fhdwexam@nopoints}
 \setboolean{fhdwexam@nopoints}{false}
+\newboolean{fhdwexam@showscheme}
+\setboolean{fhdwexam@showscheme}{true}
 
 \DeclareOption{java}{
  \setboolean{fhdwexam@java}{true}
@@ -40,6 +42,9 @@
 }
 \DeclareOption{nopoints}{
  \setboolean{fhdwexam@nopoints}{true}
+}
+\DeclareOption{noscheme}{
+ \setboolean{fhdwexam@showscheme}{false}
 }
 \DeclareOption*{
  \PackageWarning{tosexam}{Unknown option '\CurrentOption'}
@@ -179,6 +184,16 @@ xleftmargin=2em
 
 \ifthenelse{\boolean{fhdwexam@nopoints}}{\nopointsinmargin\pointformat{}}{}
 
+\NewDocumentCommand{\evaluationscheme}{O{1ex} m O{} O{}}{\ifthenelse{\boolean{fhdwexam@showscheme}}{
+\vspace*{#1}
+#3
+\noindent
+\textbf{Bewertungsschema:}
+\begin{itemize}[itemsep=0pt]
+#2
+\end{itemize}
+#4
+}{}}
 
 \AtBeginDocument{%
     \ifthenelse{\boolean{fhdwexam@cover}}{%
