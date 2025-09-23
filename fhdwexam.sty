@@ -13,6 +13,10 @@
 \setboolean{fhdwexam@calculator}{false}
 \newboolean{fhdwexam@othertools}
 \setboolean{fhdwexam@othertools}{false}
+\newboolean{fhdwexam@otherindividual}
+\setboolean{fhdwexam@otherindividual}{false}
+\newboolean{fhdwexam@otherscript}
+\setboolean{fhdwexam@otherscript}{false}
 \newboolean{fhdwexam@cover}
 \setboolean{fhdwexam@cover}{true}
 \newboolean{fhdwexam@simple}
@@ -21,6 +25,8 @@
 \setboolean{fhdwexam@nopoints}{false}
 \newboolean{fhdwexam@showscheme}
 \setboolean{fhdwexam@showscheme}{true}
+\newboolean{fhdwexam@cheatsheet}
+\setboolean{fhdwexam@cheatsheet}{false}
 
 \DeclareOption{java}{
  \setboolean{fhdwexam@java}{true}
@@ -33,6 +39,7 @@
 }
 \DeclareOption{calculator}{
  \setboolean{fhdwexam@calculator}{true}
+ \setboolean{fhdwexam@othertools}{true}
 }
 \DeclareOption{nocover}{
  \setboolean{fhdwexam@cover}{false}
@@ -45,6 +52,13 @@
 }
 \DeclareOption{noscheme}{
  \setboolean{fhdwexam@showscheme}{false}
+}
+\DeclareOption{cheatsheet}{
+ \setboolean{fhdwexam@cheatsheet}{true}
+ \setboolean{fhdwexam@othertools}{true}
+}
+\DeclareOption{otherscript}{
+ \setboolean{fhdwexam@otherscript}{true}
 }
 \DeclareOption*{
  \PackageWarning{tosexam}{Unknown option '\CurrentOption'}
@@ -82,6 +96,17 @@
 \newcommand{\fhdwexam@othertoolscheck}{\ifthenelse{\boolean{fhdwexam@othertools}}{\cxmark}{\comark}}
 \newcommand{\fhdwexam@othertoolstext}{}
 \newcommand{\fhdwexam@personalhints}{}
+\newcommand{\fhdwexam@calculatortext}{\ifthenelse{\boolean{fhdwexam@calculator}}{nicht programmierbarer Taschenrechner}{}}
+\newcommand{\fhdwexam@cheatsheettext}{\ifthenelse{\boolean{fhdwexam@cheatsheet}}{beidseitig beschriebene DIN A4 Seite (muss nicht abgegeben werden)}{}}
+\newcommand{\fhdwexam@othertoolscombined}
+{\ifthenelse{\boolean{fhdwexam@othertools}}{: \begin{minipage}[t]{7.7cm}\ifthenelse{\boolean{fhdwexam@otherscript}}{\scriptsize}{}}{}
+\fhdwexam@calculatortext{}%
+\ifthenelse{\boolean{fhdwexam@calculator} \AND \(\boolean{fhdwexam@cheatsheet} \OR \boolean{fhdwexam@otherindividual}\)}{,}{}
+\fhdwexam@cheatsheettext{}%
+\ifthenelse{\boolean{fhdwexam@cheatsheet} \AND \boolean{fhdwexam@otherindividual}}{,}{}
+\fhdwexam@othertoolstext{}
+\ifthenelse{\boolean{fhdwexam@othertools}}{\end{minipage}}{}
+}
 
 \newcommand{\ExamModule}[1]{\renewcommand{\fhdwexam@module}{#1}}
 \newcommand{\ExamName}[2][]{\renewcommand{\fhdwexam@name}{#2}\ifthenelse{\equal{#1}{}}{}{\renewcommand{\fhdwexam@shortname}{#1}}}
@@ -90,7 +115,7 @@
 \newcommand{\ExamDuration}[1]{\renewcommand{\fhdwexam@duration}{#1}}
 \newcommand{\ExamSemester}[1]{\renewcommand{\fhdwexam@semester}{#1}}
 \newcommand{\ExamGroups}[1]{\renewcommand{\fhdwexam@groups}{#1}}
-\newcommand{\ExamTools}[1]{\renewcommand{\fhdwexam@othertoolstext}{: #1}\setboolean{fhdwexam@othertools}{true}}
+\newcommand{\ExamTools}[1]{\renewcommand{\fhdwexam@othertoolstext}{#1}\setboolean{fhdwexam@othertools}{true}\setboolean{fhdwexam@otherindividual}{true}}
 \newcommand{\ExamHints}[1]{\renewcommand{\fhdwexam@personalhints}{#1}}
 
 \newenvironment{hints}{%
@@ -234,7 +259,7 @@ xleftmargin=2em
             \begin{itemize}[noitemsep]
 			\item[\fhdwexam@notoolscheck] Keine Hilfsmittel
             \item[\fhdwexam@calculatorcheck] FHDW-Taschenrechner
-            \item[\fhdwexam@othertoolscheck] andere Hilfsmittel\fhdwexam@othertoolstext
+            \item[\fhdwexam@othertoolscheck] andere Hilfsmittel\fhdwexam@othertoolscombined
 			\end{itemize}
         \end{minipage}
         \end{flushright}
