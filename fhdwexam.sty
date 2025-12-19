@@ -147,7 +147,8 @@
 \vsword{\textbf{Erreicht}}
 \vtword{\textbf{Gesamt:}}
 
-\qformat{\textbf{Aufgabe~\thequestion{} (\thequestiontitle):~\hfill \ifthenelse{\boolean{fhdwexam@nopoints}}{}{(\totalpoints{} Punkte)}}}
+\pointformat{[\phantom{xxx}/\thepoints]}
+\qformat{\textbf{Aufgabe~\thequestion{} (\thequestiontitle):~\hfill \ifthenelse{\boolean{fhdwexam@nopoints}}{}{[\phantom{xxxx}//\totalpoints{} Punkte]}}}
 
 \coverextraheadheight{-5mm}
 
@@ -160,6 +161,10 @@
 \pointpoints{Punkt}{Punkte}
 
 \renewcommand{\solutiontitle}{\noindent\textbf{Lösung:}\\[1.5ex]}
+
+\setlength{\rightpointsmargin}{2.5cm}
+
+\newcommand{\solutionspace}[1]{\ifprintanswers\else\vspace*{#1}\fi\droppoints}
 
 \lstset{%
 basicstyle=\ttfamily,
@@ -221,6 +226,7 @@ xleftmargin=2em
 }{}}
 
 \AtBeginDocument{%
+    \pointsdroppedatright
     \ifthenelse{\boolean{fhdwexam@cover}}{%
     \begin{coverpages}
         \ifthenelse{\boolean{fhdwexam@simple}}{}{
